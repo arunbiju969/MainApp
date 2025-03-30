@@ -1,4 +1,3 @@
-```markdown
 # GeoServer Django Integration
 
 A lightweight Django application for creating interactive geospatial web maps using GeoServer and Leaflet. This project provides a modern, responsive UI built with Tailwind CSS and Flowbite to visualize and interact with GeoServer layers.
@@ -182,6 +181,3 @@ python manage.py collectstatic --no-input
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-
-Similar code found with 2 license types
