@@ -1,0 +1,36 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+myenv/
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+media
+
+# Tailwind CSS
+node_modules/
+.cache/
+dist/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+.vercel
