@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+{% block section_title %}{{ section_title }}{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Query Details: {{ label }}</h1>
+    <div class="mb-4">
+        <strong>Query:</strong> {{ query }}
+    </div>
+    <div class="mb-4">
+        <strong>Model:</strong> {{ model }}
+    </div>
+    <div class="mb-4">
+        <strong>Status:</strong>
+        {% if model_data.status == "success" %}
+            <span class="text-green-600 font-bold">Success</span>
+        {% else %}
+            <span class="text-red-600 font-bold">Error</span>
+        {% endif %}
+    </div>
+    <div class="mb-4">
+        {% if model_data.status == "success" %}
+            <strong>Selected Layers:</strong>
+            <ul class="list-disc pl-6">
+                {% for layer in model_data.selected_layers %}
+                    <li>{{ layer }}</li>
+                {% endfor %}
+            </ul>
+            <strong>Explanation:</strong>
+            <div class="bg-gray-100 rounded p-2 mt-2">{{ model_data.explanation }}</div>
+        {% else %}
+            <strong>Error Message:</strong>
+            <div class="bg-red-100 rounded p-2 mt-2">{{ model_data.error_message }}</div>
+            {% if model_data.raw_response %}
+                <strong>Raw Response:</strong>
+                <pre class="bg-gray-100 rounded p-2 mt-2 text-xs break-words overflow-x-auto">{{ model_data.raw_response }}</pre>
+            {% endif %}
+        {% endif %}
+        <div class="mt-4 text-sm text-gray-500">Duration: {{ model_data.duration_seconds }} seconds</div>
+    </div>
+    <a href="{{ nav_links.1.url }}" class="text-blue-600 hover:underline">← Back to Results</a>
+</div>
+{% endblock %}

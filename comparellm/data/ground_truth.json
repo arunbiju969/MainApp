@@ -1,0 +1,30 @@
+{
+    "Number of litter bins within Sambro, Halifax": [
+        "gis_user.litter_bins",
+        "gis_user.community_boundaries"
+    ],
+    "Number of litter bin and boat facilities within Sambro, Halifax": [
+        "gis_user.litter_bins",
+        "gis_user.boat_facilities",
+        "gis_user.community_boundaries"
+    ],
+    "World's most populous city": [
+        "gis_user.worldcities"
+    ],
+    "Total number of communities in  Halifax Regional Municipality": [
+        "gis_user.community_boundaries"
+    ],
+    "Number of boat facilities in Halifax": [
+        "gis_user.boat_facilities"
+    ],
+    "All the available datasets in Halifax": [
+        "gis_user.boat_facilities",
+        "gis_user.community_boundaries",
+        "gis_user.litter_bins"
+    ],
+    "All the available datasets": [
+        "gis_user.worldcities",
+        "gis_user.boat_facilities",
+        "gis_user.litter_bins"
+    ]
+}

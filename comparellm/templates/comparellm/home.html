@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+{% block section_title %}Home{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8 text-center">
+    <h1 class="text-3xl font-bold mb-4">Welcome to the LLM Model Comparison Dashboard</h1>
+    <p class="mb-8">Explore model results, summaries, and layer comparisons using the navigation below.</p>
+    <div class="flex flex-col md:flex-row gap-4 mb-8 justify-center items-center">
+        <a href="{% url 'return_status_summary' %}" class="bg-blue-600 text-white px-6 py-3 rounded shadow hover:bg-blue-700 transition text-center font-semibold">
+            Return Status Summary
+        </a>
+        <a href="{% url 'layer_comparison_summary' %}" class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition text-center font-semibold">
+            Layer Comparison Summary
+        </a>
+        <a href="{% url 'merged_summary' %}" class="bg-yellow-500 text-white px-6 py-3 rounded shadow hover:bg-yellow-600 transition text-center font-semibold">
+            Merged Summary
+        </a>
+    </div>
+    <!-- Optionally, include your summary tables here as well -->
+</div>
+{% endblock %}

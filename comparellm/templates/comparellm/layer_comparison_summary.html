@@ -1,0 +1,107 @@
+{% extends "_base.html" %}
+{% block section_title %}{{ section_title }}{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Selected Layer vs Ground Truth Summary</h1>
+    <div class="mb-6">
+        <ul class="list-disc pl-6">
+            <li><strong>Total Runs:</strong> {{ total_runs }}</li>
+            <li><strong>Total Queries:</strong> {{ total_queries }}</li>
+            <li><strong>Total Unique Models:</strong> {{ total_models }}</li>
+        </ul>
+    </div>
+    <form method="get" class="mb-4 flex items-center gap-2">
+        <label for="run" class="font-semibold">Run:</label>
+        <select name="run" id="run" class="border rounded px-2 py-1">
+            {% for filename, run_number in run_choices %}
+                <option value="{{ filename }}" {% if filename == selected_run %}selected{% endif %}>
+                    Run {{ run_number }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+    <h2 class="text-xl font-bold mt-10 mb-4">All Models vs Queries (Layer Comparison)</h2>
+    <div class="overflow-x-auto">
+        {{ all_table_html|safe }}
+    </div>
+    <h2 class="text-xl font-bold mt-10 mb-4">Combined Layer Comparison Table (All Runs)</h2>
+    <div class="overflow-x-auto mb-8">
+        {{ combined_layer_table_html|safe }}
+    </div>
+    <p class="text-xs text-gray-500 mb-8">
+        Each <span class="text-green-600 font-bold">&#10004;</span> indicates a correct layer selection for that model/query in a run.<br>
+        Each <span class="text-red-600 font-bold">&#10008;</span> indicates an incorrect layer selection.<br>
+        <span class="text-gray-400 font-bold">◯</span> means no data for that run.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 mt-10 gap-8">
+        {% for run in pie_data %}
+            <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+                <h2 class="text-lg font-semibold mb-2 text-center">Run {{ run.run_number }}</h2>
+                <div class="flex justify-center items-center w-full">
+                    <canvas id="piechart-{{ forloop.counter }}" width="350" height="350"></canvas>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart.js datalabels plugin CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        {% for run in pie_data %}
+        new Chart(document.getElementById('piechart-{{ forloop.counter }}'), {
+            type: 'pie',
+            data: {
+                labels: ['Correct', 'Incorrect'],
+                datasets: [{
+                    data: [{{ run.correct }}, {{ run.incorrect }}],
+                    backgroundColor: ['#22c55e', '#ef4444'],
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        color: '#222',
+                        font: { weight: 'bold' },
+                        formatter: (value, context) => {
+                            const data = context.chart.data.datasets[0].data;
+                            const total = data.reduce((a, b) => a + b, 0);
+                            if (total === 0) return '0%';
+                            return Math.round((value / total) * 100) + '%';
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+        {% endfor %}
+    });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Restore scroll position if available
+    if (window.sessionStorage.scrollTop) {
+        window.scrollTo(0, window.sessionStorage.scrollTop);
+        window.sessionStorage.removeItem('scrollTop');
+    }
+    // Attach to run picker
+    var runSelect = document.getElementById('run');
+    if (runSelect) {
+        runSelect.addEventListener('change', function() {
+            window.sessionStorage.scrollTop = window.scrollY;
+            this.form.submit();
+        });
+    }
+    // Attach to all other forms that auto-submit (optional)
+    document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function() {
+            window.sessionStorage.scrollTop = window.scrollY;
+        });
+    });
+});
+</script>
+{% endblock %}

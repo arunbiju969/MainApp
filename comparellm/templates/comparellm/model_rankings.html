@@ -1,0 +1,13 @@
+{% extends "_base.html" %}
+{% block section_title %}{{ section_title }}{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Model Rankings: Overall Success Rate</h1>
+    <div class="overflow-x-auto mb-8">
+        {{ table_html|safe }}
+    </div>
+    <p class="text-xs text-gray-500">
+        Success Rate = (Number of successes across all queries and runs) / (Total possible) × 100%
+    </p>
+</div>
+{% endblock %}

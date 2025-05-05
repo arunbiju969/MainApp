@@ -1,0 +1,37 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block section_title %}{{ section_title }}{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Individual Model Results</h1>
+
+    {% include "comparellm/filter_form.html" %}
+
+    <div class="flex flex-col md:flex-row gap-8">
+        <!-- Success Table -->
+        <div class="w-full md:w-2/3 bg-white rounded shadow p-4 overflow-x-auto">
+            <h2 class="text-lg font-semibold mb-2 text-center">Success Table (✔️ = Success, ✘ = Fail)</h2>
+            {{ success_table_html|safe }}
+        </div>
+
+        <!-- Query Legend -->
+        <div class="w-full md:w-1/3 bg-gray-50 rounded shadow p-4 border border-gray-200">
+            <h2 class="text-lg font-semibold mb-4 text-center">Query Legend</h2>
+            <ul class="space-y-3">
+                {% for label, query in legend %}
+                    <li class="flex items-center gap-2">
+                        <a href="{% url 'query_detail' label=label model=selected_model %}?run={{ selected_run|urlencode }}&section=return_status">
+                            <span class="bg-blue-100 text-blue-800 font-bold rounded w-[90px] h-[2.5em] flex items-center justify-center flex-shrink-0 text-center cursor-pointer hover:bg-blue-200 transition">
+                                {{ label }}
+                            </span>
+                        </a>
+                        <span class="text-gray-700 h-[2.5em] flex items-center">
+                            {{ query }}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

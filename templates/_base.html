@@ -1,4 +1,3 @@
-.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,14 +21,16 @@
     <header class="bg-white shadow-md">
         <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center">
-                <a href="/" class="text-xl font-bold text-blue-700">GeoSpatial App</a>
+                <a href="{% url 'home' %}" class="text-xl font-bold text-blue-700">LLM Model Comparison</a>
             </div>
             
             <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-4">
-                <a href="{% url 'geoapp:default_map' %}" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Maps</a>
-                <a href="/admin/" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Admin</a>
-                <a href="#about" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">About</a>
+                <a href="{% url 'home' %}" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Home</a>
+                <a href="{% url 'return_status_summary' %}" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Return Status Summary</a>
+                <a href="{% url 'layer_comparison_summary' %}" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Layer Comparison Summary</a>
+                <a href="{% url 'merged_summary' %}" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Merged Summary</a>
+                <a href="{% url 'model_rankings' %}" class="px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Model Rankings</a>
             </div>
             
             <!-- Mobile Navigation Button -->
@@ -45,7 +46,11 @@
         <!-- Mobile Navigation Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="{% url 'geoapp:default_map' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Maps</a>
+                <a href="{% url 'home' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Home</a>
+                <a href="{% url 'return_status_summary' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Return Status Summary</a>
+                <a href="{% url 'layer_comparison_summary' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Ground Truth Summary</a>
+                <a href="{% url 'merged_summary' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Merged Summary</a>
+                <a href="{% url 'model_rankings' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Model Rankings</a>
                 <a href="/admin/" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">Admin</a>
                 <a href="#about" class="block px-3 py-2 text-gray-700 hover:text-blue-700 rounded-md hover:bg-gray-100">About</a>
             </div>
@@ -54,6 +59,43 @@
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 py-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-center mb-6 text-blue-800">
+            {% block section_title %}GeoSpatial Web App{% endblock section_title %}
+        </h1>
+        {% if request.resolver_match.url_name != 'home' and nav_links %}
+        <nav class="mb-4">
+            <ul class="flex justify-center gap-8 bg-white rounded-lg shadow px-6 py-3 border">
+                {% for link in nav_links %}
+                    <li>
+                        {% if link.url %}
+                            <a href="{{ link.url }}" class="text-blue-700 font-semibold hover:underline transition">
+                                {{ link.label }}
+                            </a>
+                        {% else %}
+                            <span class="text-blue-700 font-semibold">{{ link.label }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% if ranking_nav_links %}
+        <nav class="mb-4">
+            <ul class="flex justify-center gap-8 bg-white rounded-lg shadow px-6 py-3 border">
+                {% for link in ranking_nav_links %}
+                    <li>
+                        {% if link.url %}
+                            <a href="{{ link.url }}" class="text-blue-700 font-semibold hover:underline transition">
+                                {{ link.label }}
+                            </a>
+                        {% else %}
+                            <span class="text-blue-700 font-semibold">{{ link.label }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
         {% block content %}
         <!-- Page content goes here -->
         {% endblock content %}

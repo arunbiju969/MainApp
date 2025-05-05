@@ -1,0 +1,32 @@
+{# filepath: comparellm/templates/comparellm/layer_comparison_cell.html #}
+{% if m.is_correct %}
+    <span class="text-green-600 font-bold">✔ Correct</span>
+{% else %}
+    <span class="text-red-600 font-bold">✘ Incorrect</span>
+{% endif %}
+<div>
+    <span class="font-semibold">Selected:</span>
+    <ul class="list-disc pl-4">
+        {% for l in m.model_layers %}
+            <li>{{ l }}</li>
+        {% empty %}
+            <li class="text-gray-400">None</li>
+        {% endfor %}
+    </ul>
+</div>
+<div>
+    <span class="font-semibold">Ground Truth:</span>
+    <ul class="list-disc pl-4">
+        {% for l in m.ground_truth %}
+            <li>{{ l }}</li>
+        {% empty %}
+            <li class="text-gray-400">None</li>
+        {% endfor %}
+    </ul>
+</div>
+{% if m.missing %}
+    <div class="text-yellow-700 text-xs">Missing: {{ m.missing|join:", " }}</div>
+{% endif %}
+{% if m.extra %}
+    <div class="text-blue-700 text-xs">Extra: {{ m.extra|join:", " }}</div>
+{% endif %}

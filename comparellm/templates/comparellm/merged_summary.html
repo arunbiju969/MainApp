@@ -1,0 +1,86 @@
+{% extends "_base.html" %}
+{% block section_title %}{{ section_title }}{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Merged Summary: Return Status vs Layer Comparison</h1>
+    <div class="overflow-x-auto">
+        {{ merged_table_html|safe }}
+    </div>
+    <div class="mt-4 text-xs text-gray-600">
+        <span class="text-green-600 font-bold">&#10004;&#10004;</span> Success & Correct &nbsp;
+        <span class="text-yellow-600 font-bold">&#10004;&#10008;</span> Success but Incorrect &nbsp;
+        <span class="text-red-600 font-bold">&#10008;&#10008;</span> Error & Incorrect
+    </div>
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for run in pie_data %}
+            <div class="flex flex-col items-center bg-white rounded shadow p-4">
+                <h2 class="text-lg font-semibold mb-2">Run {{ run.run_number }}</h2>
+                <canvas id="merged-piechart-{{ forloop.counter }}" width="350" height="350"></canvas>
+            </div>
+        {% endfor %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        new Chart(document.getElementById('merged-piechart'), {
+            type: 'pie',
+            data: {
+                labels: ['Success & Correct', 'Success but Incorrect', 'Error & Incorrect'],
+                datasets: [{
+                    data: [{{ success_correct }}, {{ success_incorrect }}, {{ error_incorrect }}],
+                    backgroundColor: ['#22c55e', '#facc15', '#ef4444'],
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        color: '#222',
+                        font: { weight: 'bold' },
+                        formatter: (value, context) => {
+                            const data = context.chart.data.datasets[0].data;
+                            const total = data.reduce((a, b) => a + b, 0);
+                            if (total === 0) return '0%';
+                            return Math.round((value / total) * 100) + '%';
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        {% for run in pie_data %}
+        new Chart(document.getElementById('merged-piechart-{{ forloop.counter }}'), {
+            type: 'pie',
+            data: {
+                labels: ['Success & Correct', 'Success but Incorrect', 'Error & Incorrect'],
+                datasets: [{
+                    data: [{{ run.success_correct }}, {{ run.success_incorrect }}, {{ run.error_incorrect }}],
+                    backgroundColor: ['#22c55e', '#facc15', '#ef4444'],
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        color: '#222',
+                        font: { weight: 'bold' },
+                        formatter: (value, context) => {
+                            const data = context.chart.data.datasets[0].data;
+                            const total = data.reduce((a, b) => a + b, 0);
+                            if (total === 0) return '0%';
+                            return Math.round((value / total) * 100) + '%';
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+        {% endfor %}
+    });
+    </script>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class GeoappConfig(AppConfig):
+class ComparellmConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'geoapp'
+    name = 'comparellm'
